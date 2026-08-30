@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import contextmanager
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -54,8 +55,12 @@ class ExpenseStore:
             for row in rows
         ]
 
-    def _connect(self) -> sqlite3.Connection:
+    @contextmanager
+    def _connect(self):
         connection = sqlite3.connect(self.database)
         connection.row_factory = sqlite3.Row
-        return connection
-
+        try:
+            with connection:
+                yield connection
+        finally:
+            connection.close()
