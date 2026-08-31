@@ -27,6 +27,7 @@ class ExpenseStore:
             )
 
     def add(self, expense: Expense) -> int:
+        # Store cents so money stays exact.
         cents = int(expense.amount * 100)
         with self._connect() as connection:
             cursor = connection.execute(
@@ -60,6 +61,7 @@ class ExpenseStore:
         connection = sqlite3.connect(self.database)
         connection.row_factory = sqlite3.Row
         try:
+            # Commit on success and roll back on errors.
             with connection:
                 yield connection
         finally:

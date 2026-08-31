@@ -14,10 +14,10 @@ class Expense:
 
 def parse_amount(value: str) -> Decimal:
     try:
+        # Keep every amount at two decimal places.
         amount = Decimal(value).quantize(Decimal("0.01"))
     except InvalidOperation as exc:
         raise ValueError("amount must be a number") from exc
     if amount <= 0:
         raise ValueError("amount must be greater than zero")
     return amount
-
