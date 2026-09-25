@@ -18,6 +18,8 @@ def parse_amount(value: str) -> Decimal:
         amount = Decimal(value).quantize(Decimal("0.01"))
     except InvalidOperation as exc:
         raise ValueError("amount must be a number") from exc
+    if not amount.is_finite():
+        raise ValueError("amount must be a finite number")
     if amount <= 0:
         raise ValueError("amount must be greater than zero")
     return amount
